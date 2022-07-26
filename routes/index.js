@@ -2,17 +2,14 @@ var express = require('express');
 var router = express.Router();
 const moment = require('moment')
 const { MongoClient, ObjectId } = require('mongodb');
-// or as an es module:
-// import { MongoClient } from 'mongodb'
 
-// Connection URL
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 client.connect()
 const dbName = 'datadb';
 const db = client.db(dbName);
   const collection = db.collection('mahasiswa');
-
+// ============================SEARCHING===============================================
 router.get('/', function(req, res, next) {
   const url = req.url == '/' ? '/?page=1' : req.url
   const limit = 2
@@ -63,7 +60,7 @@ collection.count(jumlah)
 .then(result=> res.render('menu',{rows:result,moment,pages,page,url,query:req.query
 })))
 });
-//tambah
+//============================TAMBAH===============================================
 router.get('/tambah',(req,res)=>{
   res.render('tambah')
 })
@@ -81,14 +78,14 @@ collection.insertOne({nama:nama,berat:berat,tinggi:tinggi,status:status,lahir:da
 res.redirect('/')
 })
 
-//delete
+//============================DELETE===============================================
 router.get('/delet/:id',(req,res)=>{
   const index =req.params.id
   collection.deleteOne({_id:ObjectId(index)})
   res.redirect('/')
 })
 
-//edit
+//============================EDIT===============================================
 router.get('/edit/:id',(req,res)=>{
   collection.find({_id:ObjectId(req.params.id)}).toArray()
   .then(hasil=>res.render('edit',{item:hasil[0]}))
