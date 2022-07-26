@@ -31,7 +31,7 @@ router.get('/', function(req, res, next) {
      berat1 = {berat:berat}
   }
   if(req.query.tinggi){
-    let tinggi = parseInt(req.query.tinggi)
+    let tinggi = parseFloat(req.query.tinggi)
     tingi1 = {tinggi:tinggi}
   }
   if(req.query.status&& req.query.status !='pilih'){
@@ -71,7 +71,7 @@ router.post('/tambah',(req,res)=>{
 } else { req.body.status = false }
 let status = req.body.status
 let berat = parseInt(req.body.berat)
-let tinggi = parseInt(req.body.tinggi)
+let tinggi = parseFloat(req.body.tinggi)
 let date = req.body.date
 let nama = req.body.nama
 collection.insertOne({nama:nama,berat:berat,tinggi:tinggi,status:status,lahir:date})
@@ -94,7 +94,7 @@ router.get('/edit/:id',(req,res)=>{
 router.post('/edit/:id',(req,res)=>{
   
   let nama = req.body.nama
-  let tinggi = parseInt(req.body.tinggi)
+  let tinggi = parseFloat(req.body.tinggi)
   let date = req.body.date
   let status = req.body.status
   let berat = parseInt(req.body.berat)
