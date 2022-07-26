@@ -12,10 +12,56 @@ client.connect()
 const dbName = 'datadb';
 const db = client.db(dbName);
   const collection = db.collection('mahasiswa');
-// Database Name
+
 router.get('/', function(req, res, next) {
-collection.find({}).toArray()
-.then(hasil=>res.render('menu',{rows:hasil,moment}))
+  const url = req.url == '/' ? '/?page=1' : req.url
+  const limit = 2
+  const page = req.query.page ||1
+  const offset = (page-1)*limit
+  where=[]
+  let status1 
+  let tingi1 
+  let berat1
+  let nama
+  let date1 
+  let date2
+  let jumlahDate
+  if(req.query.nama){
+   nama = {nama:{$regex:`${req.query.nama}`}}
+  }
+  if(req.query.berat){
+    let berat = parseInt(req.query.berat)
+     berat1 = {berat:berat}
+  }
+  if(req.query.tinggi){
+    let tinggi = parseInt(req.query.tinggi)
+    tingi1 = {tinggi:tinggi}
+  }
+  if(req.query.status&& req.query.status !='pilih'){
+    let status = req.query.status
+    if (req.body.status == 'menikah') {
+      status = true
+  } else { status = false }
+ status1 = {status:status}
+  }
+  if(req.query.date && req.query.date2 ){
+    date1 = req.query.date
+    date2 = req.query.date2
+    jumlahDate={lahir:{$gte:(date1),$lt:(date2)}}
+  }
+ else if(req.query.date){
+  date1={lahir:{$gte:(req.query.date)}}
+ }
+ else if (req.query.date2){
+  date2={lahir:{$lt:(req.query.date2)}}
+ }
+ let jumlah ={...nama,...berat1,...tingi1,...status1,...date1,...date2,...jumlahDate}
+ 
+collection.count(jumlah)
+.then(hitung=>Math.ceil(hitung/limit))
+.then(pages=>collection.find(jumlah).limit(limit).skip(offset).toArray()
+.then(result=> res.render('menu',{rows:result,moment,pages,page,url,query:req.query
+})))
 });
 //tambah
 router.get('/tambah',(req,res)=>{

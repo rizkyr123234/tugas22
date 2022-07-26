@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,8 +10,26 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/icon/css/all.css" rel="stylesheet">
 </head>
+
 <body>
+    <h1> Tambah Data</h1>
+        <form action="" method="get">
+            <input type="hidden" name="page" id="" value="1" > 
+            Nama<input type="text" name="nama" id="" value="<%=query.nama%>" placeholder="nama" > <br>
+            Tinggi<input type="text" name="tinggi" id="" value="<%=query.tinggi%>" placeholder=" tinggi"> <br>
+            berat<input type='text' name="berat" placeholder="berat" value="<%=query.berat%>"> <br>
+           <br><center> <input type="date" name="date" id="" value="<%=query.date%>"></center> <br>
+           tanggal lahir <br> <center>to</center>
+             <center><input type="date" name="date2" id="" value="<%=query.date2%>"></center> <br>
+            status<select name="status" id="" >
+                <option <%=query.status=='pilih'?"selected":null%> >pilih</option>
+                <option <%=query.status=='nikah'?"selected":null%>>nikah</option>
+                <option <%=query.status=='jomblo'?"selected":null%>>jomblo</option>
+                </select> <br>
+            <button class = "cari" type="submit">Cari</button> 
+        </form><br>
     <table class="table table-striped">
+
         <head>
             <th>No</th>
             <th>Nama</th>
@@ -19,24 +38,46 @@
             <th>Status</th>
             <th>Lahir</th>
         </head>
-            <tbody>
-                <% rows.forEach((item, index)=> {%>
-                    <tr>
-                        <td><%= index+1%></td>
-                        <td><%= item.nama%></td>
-                        <td><%= item.berat%></td>
-                        <td><%= item.tinggi%></td>
-                        <td><%= item.status==true?'menikah':'jomblo'%></td>
-                        <td><%= moment(item.lahir).format('DD MMMM YYYY')%></td>
-                        <td>
-                            <a class ="hapus"href="/delet/<%=item._id%>">apus</a>
-                            <a class = "edit"href="/edit/<%=item._id %>">edit</a>
-                        </td>
-                    </tr>
-                    <%}) %>
-            </tbody>
-            %>
+        <tbody>
+            <% rows.forEach((item, index)=> {%>
+                <tr>
+                    <td>
+                        <%= index+1%>
+                    </td>
+                    <td>
+                        <%= item.nama%>
+                    </td>
+                    <td>
+                        <%= item.berat%>
+                    </td>
+                    <td>
+                        <%= item.tinggi%>
+                    </td>
+                    <td>
+                        <%= item.status==true?'menikah':'jomblo'%>
+                    </td>
+                    <td>
+                        <%= moment(item.lahir).format('DD MMMM YYYY')%>
+                    </td>
+                    <td>
+                        <a class="hapus" href="/delet/<%=item._id%>">apus</a>
+                        <a class="edit" href="/edit/<%=item._id %>">edit</a>
+                    </td>
+                </tr>
+                <%}) %>
+        </tbody>
+        %>
     </table>
     <a class="tambah" href="tambah">tambah data</a> <br>
+    <nav aria-label="...">
+        <ul class="pagination pagination-lg">
+            <%for(let i=1; i<=pages;i++){%>
+                <li class="page-item"><a class="page-link" href="<%=url.replace(`page=${page}`,`page=${i}`)%>">
+                        <%=i%>
+                    </a></li>
+                <%}%>
+        </ul>
+    </nav>
 </body>
+
 </html>
