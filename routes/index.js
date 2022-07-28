@@ -9,14 +9,19 @@ client.connect()
 const dbName = 'datadb';
 const db = client.db(dbName);
   const collection = db.collection('mahasiswa');
-// ============================SEARCHING===============================================
+
 router.get('/', function(req, res, next) {
-  const url = req.url == '/' ? '/?page=1' : req.url
-  const limit = 2
+
+  const url = req.url == '/' ? '/?page=1&orderBy=nama&mode=1' :req.url
+  const limit = 3
   const page = req.query.page ||1
   const offset = (page-1)*limit
+  
+  // ================================SORTING==========================================
+
   let order 
   let mode = req.query.mode || '1'
+  
   if(req.query.orderBy == 'nama'){
     order = {nama:mode}
   } else if(req.query.orderBy=='berat'){
@@ -26,14 +31,17 @@ router.get('/', function(req, res, next) {
   } else if(req.query.orderBy=='lahir'){
     order={lahir:mode}
   }
-  
+
+  // ============================SEARCHING===============================================
+
   let status1 
-  let tingi1 
+  let tinggi1 
   let berat1
   let nama
   let date1 
   let date2
   let jumlahDate
+  
   if(req.query.nama){
    nama = {nama:{$regex:`${req.query.nama}`}}
   }
@@ -43,11 +51,12 @@ router.get('/', function(req, res, next) {
   }
   if(req.query.tinggi){
     let tinggi = parseFloat(req.query.tinggi)
-    tingi1 = {tinggi:tinggi}
+    tinggi1 = {tinggi:tinggi}
   }
   if(req.query.status&& req.query.status !='pilih'){
     let status = req.query.status
-    if (req.body.status == 'menikah') {
+    console.log(req.query.status == 'nikah')
+    if (req.query.status == 'nikah') {
       status = true
   } else { status = false }
  status1 = {status:status}
@@ -63,7 +72,8 @@ router.get('/', function(req, res, next) {
  else if (req.query.date2){
   date2={lahir:{$lt:(req.query.date2)}}
  }
- let jumlah ={...nama,...berat1,...tingi1,...status1,...date1,...date2,...jumlahDate}
+ console.log(status1,'cek status')
+ let jumlah ={...nama,...berat1,...tinggi1,...status1,...date1,...date2,...jumlahDate}
  
 collection.count(jumlah)
 .then(hitung=>Math.ceil(hitung/limit))
@@ -115,7 +125,6 @@ router.post('/edit/:id',(req,res)=>{
   collection.updateMany({_id:ObjectId(req.body.id)},{$set:{nama:nama,berat:berat, tinggi:tinggi,status:status,date:date}})
   res.redirect('/')
 })
-/* GET home page. */
 
 
 module.exports = router;
