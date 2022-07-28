@@ -76,6 +76,8 @@ div {
     <h1>Cari Mahasiswa</h1>
         <form action="" method="get">
             <input type="hidden" name="page" id="" value="1" > 
+            <input type="hidden" name="orderBy" id="" value="nama" > 
+            <input type="hidden" name="mode" id="" value="1" > 
             Nama<input type="text" name="nama" id="" value="<%=query.nama%>" placeholder="nama" > <br>
             Tinggi<input type="text" name="tinggi" id="" value="<%=query.tinggi%>" placeholder=" tinggi"> <br>
             berat<input type='text' name="berat" placeholder="berat" value="<%=query.berat%>"> <br>
@@ -93,11 +95,20 @@ div {
 
         <head>
             <th>No</th>
-            <th>Nama</th>
-            <th>Berat</th>
-            <th>Tinggi</th>
+            <th> 
+                <a href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=nama`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
+                    <i class="fa-solid fa-<%=query.orderBy== 'nama' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">Nama
+            </th>
+            <th>
+                <a href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=berat`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
+                    <i class="fa-solid fa-<%=query.orderBy== 'berat' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">Berat</th>
+            <th>
+                <a href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=tinggi`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
+                    <i class="fa-solid fa-<%=query.orderBy== 'tinggi' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">Tinggi</th>
             <th>Status</th>
-            <th>Lahir</th>
+            <th>
+                <a href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=lahir`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
+                    <i class="fa-solid fa-<%=query.orderBy== 'lahir' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>"> Lahir</th>
         </head>
         <tbody>
             <% rows.forEach((item, index)=> {%>

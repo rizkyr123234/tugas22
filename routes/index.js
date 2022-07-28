@@ -15,7 +15,18 @@ router.get('/', function(req, res, next) {
   const limit = 2
   const page = req.query.page ||1
   const offset = (page-1)*limit
-  where=[]
+  let order 
+  let mode = req.query.mode || '1'
+  if(req.query.orderBy == 'nama'){
+    order = {nama:mode}
+  } else if(req.query.orderBy=='berat'){
+    order = {berat : mode}
+  } else if(req.query.orderBy=='tinggi'){
+    order = {tinggi : mode}
+  } else if(req.query.orderBy=='lahir'){
+    order={lahir:mode}
+  }
+  
   let status1 
   let tingi1 
   let berat1
@@ -56,7 +67,7 @@ router.get('/', function(req, res, next) {
  
 collection.count(jumlah)
 .then(hitung=>Math.ceil(hitung/limit))
-.then(pages=>collection.find(jumlah).limit(limit).skip(offset).toArray()
+.then(pages=>collection.find(jumlah).limit(limit).skip(offset).sort(order).toArray()
 .then(result=> res.render('menu',{rows:result,moment,pages,page,url,query:req.query
 })))
 });
