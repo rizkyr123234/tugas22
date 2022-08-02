@@ -72,7 +72,7 @@ router.get('/', function(req, res, next) {
  else if (req.query.date2){
   date2={lahir:{$lt:(req.query.date2)}}
  }
- console.log(status1,'cek status')
+
  let jumlah ={...nama,...berat1,...tinggi1,...status1,...date1,...date2,...jumlahDate}
  
 collection.count(jumlah)

@@ -12,9 +12,75 @@ const db = client.db(dbName);
   const collection = db.collection('mahasiswa');
 
   router.get('/', function(req, res, next) {
-    collection.find().toArray()
-    .then(result=> res.status(200).json(result))
-    .catch(error=>res.status(500).json({message:"eror ambil data"}))
+   
+    const limit = 3
+  const page = req.query.page ||1
+  const offset = (page-1)*limit
+
+  // ================================SORTING==========================================
+
+  let order 
+  let mode = req.query.mode || '1'
+  
+  if(req.query.orderBy == 'nama'){
+    order = {nama:mode}
+  } else if(req.query.orderBy=='berat'){
+    order = {berat : mode}
+  } else if(req.query.orderBy=='tinggi'){
+    order = {tinggi : mode}
+  } else if(req.query.orderBy=='lahir'){
+    order={lahir:mode}
+  }
+  // =============================SEARCHING=====================
+
+  let status1 
+  let tinggi1 
+  let berat1
+  let nama
+  let date1 
+  let date2
+  let jumlahDate
+  
+  if(req.query.nama){
+   nama = {nama:{$regex:`${req.query.nama}`}}
+  }
+  if(req.query.berat){
+    let berat = parseInt(req.query.berat)
+     berat1 = {berat:berat}
+  }
+  if(req.query.tinggi){
+    let tinggi = parseFloat(req.query.tinggi)
+    tinggi1 = {tinggi:tinggi}
+  }
+  if(req.query.status){
+    let status = req.query.status
+    console.log(req.query.status == 'nikah')
+    if (req.query.status == 'nikah') {
+      status = true
+  } else { status = false }
+ status1 = {status:status}
+  }
+  if(req.query.date && req.query.date2 ){
+    date1 = req.query.date
+    date2 = req.query.date2
+    jumlahDate={lahir:{$gte:(date1),$lt:(date2)}}
+  }
+ else if(req.query.date){
+  date1={lahir:{$gte:(req.query.date)}}
+ }
+ else if (req.query.date2){
+  date2={lahir:{$lt:(req.query.date2)}}
+ }
+ 
+ let jumlah ={...nama,...berat1,...tinggi1,...status1,...date1,...date2,...jumlahDate}
+
+  collection.count(jumlah)
+  .then(hitung=>Math.ceil(hitung/limit))
+  .then(pages=>
+    collection.find(jumlah).limit(limit).skip(offset).sort(order).toArray()
+    .then(result=> res.status(200).json({data:result,pages,page}))
+    .catch(error=>res.status(500).json({message:"eror ambil data"})))
+    
   });
 
 // =======================TAMBAH DATA======================== 
