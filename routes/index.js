@@ -91,9 +91,9 @@ router.post('/tambah',(req,res)=>{
     req.body.status = true
 } else { req.body.status = false }
 let status = req.body.status
-let berat = parseInt(req.body.berat)
-let tinggi = parseFloat(req.body.tinggi)
-let date = req.body.date
+let berat = req.body.berat==''?'tidak diisi':parseInt(req.body.berat)
+let tinggi = req.body.tinggi==''?'tidak diisi':parseFloat(req.body.tinggi)
+let date = req.body.date==''?'tidak diisi':req.body.date
 let nama = req.body.nama
 collection.insertOne({nama:nama,berat:berat,tinggi:tinggi,status:status,lahir:date})
 res.redirect('/')
@@ -109,20 +109,20 @@ router.get('/delet/:id',(req,res)=>{
 //============================EDIT===============================================
 router.get('/edit/:id',(req,res)=>{
   collection.find({_id:ObjectId(req.params.id)}).toArray()
-  .then(hasil=>res.render('edit',{item:hasil[0]}))
+  .then(hasil=>res.render('edit',{item:hasil[0],moment}))
 })
 
 router.post('/edit/:id',(req,res)=>{
   
   let nama = req.body.nama
   let tinggi = parseFloat(req.body.tinggi)
-  let date = req.body.date
+  let date = moment(req.body.date).format('YYYY MM DD')
   let status = req.body.status
   let berat = parseInt(req.body.berat)
   if (req.body.status == 'menikah') {
       status = true
   } else { status = false }
-  collection.updateMany({_id:ObjectId(req.body.id)},{$set:{nama:nama,berat:berat, tinggi:tinggi,status:status,date:date}})
+  collection.updateMany({_id:ObjectId(req.body.id)},{$set:{nama:nama,berat:berat, tinggi:tinggi,status:status,lahir:date}})
   res.redirect('/')
 })
 

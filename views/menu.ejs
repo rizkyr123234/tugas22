@@ -10,105 +10,124 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/icon/css/all.css" rel="stylesheet">
     <style>
-    .tambah{
+        .tambah {
             background-color: blue;
-    color: white;
-    padding: 10px 1px;
-     text-align: center;
-    text-decoration: none;
-    display: inline-block;
+            color: white;
+            padding: 10px 1px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
         }
-        .edit{
-    background-color: green;
-    color: white;
-    padding: 5px 5px;
-     text-align: center;
-    text-decoration: none;
-    display: inline-block;
+
+        .edit {
+            background-color: green;
+            color: white;
+            padding: 5px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
         }
-        .hapus{
-  background-color: red;
-  color: white;
-  padding: 5px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-} 
-.cari{
-    background-color: blue;
-    color: white;
-    padding: 5px 10px;
-     text-align: center;
-    text-decoration: none;
-    display: inline-block;
+
+        .hapus {
+            background-color: red;
+            color: white;
+            padding: 5px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
         }
-        input[type=text],[type = date], select {
-  width: 75%;
-  padding: 5px 15px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  box-sizing: border-box;
-}
-button[type=submit] {
-  width: 7%;
-  background-color: blue;
-  color: white;
-  padding: 14px 20px;
-  margin: 5px 0;
-  border: none;
-  border-radius: 2px;
-  cursor: pointer;
-}
-button[type=submit]:hover {
-  background-color: blue;
-}
-div {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-</style>
+
+        .cari {
+            background-color: blue;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        input[type=text],
+        [type=date],
+        select {
+            width: 75%;
+            padding: 5px 15px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            box-sizing: border-box;
+        }
+
+        button[type=submit] {
+            width: 7%;
+            background-color: blue;
+            color: white;
+            padding: 14px 20px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        button[type=submit]:hover {
+            background-color: blue;
+        }
+
+        div {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Cari Mahasiswa</h1>
-        <form action="" method="get">
-            <input type="hidden" name="page" id="" value="1" > 
-            <input type="hidden" name="orderBy" id="" value="nama" > 
-            <input type="hidden" name="mode" id="" value="1" > 
-            Nama<input type="text" name="nama" id="" value="<%=query.nama%>" placeholder="nama" > <br>
-            Tinggi<input type="text" name="tinggi" id="" value="<%=query.tinggi%>" placeholder=" tinggi"> <br>
-            berat<input type='text' name="berat" placeholder="berat" value="<%=query.berat%>"> <br>
-           <br><center> <input type="date" name="date" id="" value="<%=query.date%>"></center> <br>
-           tanggal lahir <br> <center>to</center>
-             <center><input type="date" name="date2" id="" value="<%=query.date2%>"></center> <br>
-            status<select name="status" id="" >
-                <option <%=query.status=='pilih'?"selected":null%>>pilih</option>
-                <option <%=query.status=='nikah'?"selected":null%>>nikah</option>
-                <option <%=query.status=='jomblo'?"selected":null%>>jomblo</option>
-                </select> <br>
-            <button class = "cari" type="submit">Cari</button> 
-        </form><br>
+    <form action="" method="get">
+        <input type="hidden" name="page" id="" value="1">
+        <input type="hidden" name="orderBy" id="" value="nama">
+        <input type="hidden" name="mode" id="" value="1">
+        Nama<input type="text" name="nama" id="" value="<%=query.nama%>" placeholder="nama"> <br>
+        Tinggi<input type="text" name="tinggi" id="" value="<%=query.tinggi%>" placeholder=" tinggi"> <br>
+        berat<input type='text' name="berat" placeholder="berat" value="<%=query.berat%>"> <br>
+        <br>
+        <center> <input type="date" name="date" id="" value="<%=query.date%>"></center> <br>
+        tanggal lahir <br>
+        <center>to</center>
+        <center><input type="date" name="date2" id="" value="<%=query.date2%>"></center> <br>
+        status<select name="status" id="">
+            <option <%=query.status=='pilih' ?"selected":null%>>pilih</option>
+            <option <%=query.status=='nikah' ?"selected":null%>>nikah</option>
+            <option <%=query.status=='jomblo' ?"selected":null%>>jomblo</option>
+        </select> <br>
+        <button class="cari" type="submit">Cari</button>
+    </form><br>
     <table class="table table-striped">
 
         <head>
             <th>No</th>
-            <th> 
-                <a href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=nama`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
+            <th>
+                <a
+                    href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=nama`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
                     <i class="fa-solid fa-<%=query.orderBy== 'nama' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">Nama
             </th>
             <th>
-                <a href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=berat`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
-                    <i class="fa-solid fa-<%=query.orderBy== 'berat' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">Berat</th>
+                <a
+                    href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=berat`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
+                    <i class="fa-solid fa-<%=query.orderBy== 'berat' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">Berat
+            </th>
             <th>
-                <a href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=tinggi`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
-                    <i class="fa-solid fa-<%=query.orderBy== 'tinggi' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">Tinggi</th>
+                <a
+                    href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=tinggi`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
+                    <i class="fa-solid fa-<%=query.orderBy== 'tinggi' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">Tinggi
+            </th>
             <th>Status</th>
             <th>
-                <a href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=lahir`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
-                    <i class="fa-solid fa-<%=query.orderBy== 'lahir' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>"> Lahir</th>
+                <a
+                    href="<%=url.replace(`orderBy=${query.orderBy}`,`orderBy=lahir`).replace(`mode=${query.mode}`,`mode=${query.mode == '1' ?'-1':'1'}`)%>">
+                    <i class="fa-solid fa-<%=query.orderBy== 'lahir' ? query.mode=='1'?'sort-up':'sort-down':'sort'%>">
+                        Lahir
+            </th>
         </head>
         <tbody>
             <% rows.forEach((item, index)=> {%>
@@ -120,10 +139,10 @@ div {
                         <%= item.nama%>
                     </td>
                     <td>
-                        <%= item.berat%>
+                        <%= item.berat=='tidak diisi' ?'tidak-diisi':item.berat%>
                     </td>
                     <td>
-                        <%= item.tinggi%>
+                        <%= item.tinggi=='tidak diisi' ?'tidak-diisi':item.tinggi%>
                     </td>
                     <td>
                         <%= item.status==true?'menikah':'jomblo'%>
@@ -144,7 +163,8 @@ div {
     <nav aria-label="...">
         <ul class="pagination pagination-lg">
             <%for(let i=1; i<=pages;i++){%>
-                <li class="page-item"><a class="page-link" href="<%=url.replace(`page=${page}`,`page=${i}`)%>">
+                <li class="page-item <%=page == i ? 'active' : ''%>"><a class="page-link"
+                        href="<%=url.replace(`page=${page}`,`page=${i}`)%>">
                         <%=i%>
                     </a></li>
                 <%}%>
