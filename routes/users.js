@@ -120,4 +120,11 @@ router.delete('/:id',(req,res)=>{
   .then(hasil=>res.status(200).json(hasil))
   .catch(error=>res.status(500).json({message:"eror ambil data"}))
 })
+//untuk nampilin data yg mau di edit 
+router.get('/:id',(req,res)=>{
+  
+  collection.findOne({_id:ObjectId(req.params.id)})
+  .then(hasil=>res.status(200).json(hasil))
+  .catch(error=>res.status(500).json({message:"eror ambil data"}))
+})
 module.exports = router;
