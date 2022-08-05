@@ -158,9 +158,9 @@
       pages: 4,
     page: 1
 }
-    
+    var angka
     const readData = (params) =>{ // arrow function 
-    fetch(`http://localhost:3000/users/?${new URLSearchParams(params).toString()}`) // masukkan url yg di postman 
+    fetch(`http://localhost:3000/users/?${new URLSearchParams(params).toString()}&page=`) // masukkan url yg di postman 
   .then((response) => { //then pertama untuk masukkan nilai jadi json 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -170,6 +170,16 @@
   })
   .then((response) => {
    let html = ''
+   let pagi = `
+  <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>`
+          for(let i = 1; i<=response.pages;i++){
+      pagi+=`<li class="page-item"><a class="page-link" id ="cek" href=${i}>${i}</a></li>`
+    }    
+          
+  pagi+=       ` <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+  `
    response.data.forEach((item,index)=>{
    html+=`
    <tr>
@@ -186,8 +196,9 @@
   </tr>
    `
 })
+
 document.querySelector('table tbody').innerHTML= html
-pagi()
+document.getElementById('pagination').innerHTML= pagi
   });
 }
 //ini method post 
@@ -258,8 +269,8 @@ document.getElementById("form-Search").addEventListener('submit',function(event)
     const tinggi    = document.getElementById('caritinggi').value
     const status    = document.querySelector('input[name="caristatus"]:checked').value
     const date      = document.getElementById('caridate').value
-
-    readData({nama,berat,tinggi,status,date})
+    
+    readData({nama,berat,tinggi,status,date, page})
 })
 
 const del=(id)=>{
@@ -310,20 +321,18 @@ const edit=(id)=>{
       document.getElementById('date').value = response.lahir
   })
 }
-const pagi = () =>{
-  let pagi = `
-  <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>`
-          
-    for(let i = 1; i<=params.pages;i++){
-      pagi+=`<li class="page-item"><a class="page-link" href="#" datapages="${i}">${i}</a></li>`
-    }    
-          
-  pagi+=       ` <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-  `
-  document.getElementById('pagination').innerHTML=pagi
-}
+
+document.getElementById("form-Search").addEventListener('submit',function(event){
+    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
+    
+    const nama      = document.getElementById('carinama').value
+    const berat     = document.getElementById('cariberat').value
+    const tinggi    = document.getElementById('caritinggi').value
+    const status    = document.querySelector('input[name="caristatus"]:checked').value
+    const date      = document.getElementById('caridate').value
+    
+    readData({nama,berat,tinggi,status,date, page})
+})
 
 
 </script>
