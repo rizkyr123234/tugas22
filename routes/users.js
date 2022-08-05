@@ -13,7 +13,7 @@ const db = client.db(dbName);
 
   router.get('/', function(req, res, next) {
    
-    const limit = 3
+    const limit = parseInt(req.query.display) || 3
   const page = req.query.page ||1
   const offset = (page-1)*limit
 
@@ -78,20 +78,20 @@ const db = client.db(dbName);
   .then(hitung=>Math.ceil(hitung/limit))
   .then(pages=>
     collection.find(jumlah).limit(limit).skip(offset).sort(order).toArray()
-    .then(result=> res.status(200).json({data:result,pages,page}))
+    .then(result=> res.status(200).json({data:result,pages,page,limit}))
     .catch(error=>res.status(500).json({message:"eror ambil data"})))
     
   });
 
 // =======================TAMBAH DATA======================== 
 router.post('/',(req,res)=>{
-  if (req.body.status == 'nikah') {
+  if (req.body.status == 'menikah') {
     req.body.status = true
 } else { req.body.status = false }
 let status = req.body.status
 let berat = req.body.berat==''?'tidak diisi':parseInt(req.body.berat)
 let tinggi = req.body.tinggi==''?'tidak diisi':parseFloat(req.body.tinggi)
-let date = moment(req.body.date).format('YYYY MM DD')
+let date = moment(req.body.date).format('YYYY-MM-DD')
 let nama = req.body.nama
 collection.insertOne({nama:nama,berat:berat,tinggi:tinggi,status:status,lahir:date})
 .then(hasil=>res.status(200).json(hasil))
@@ -102,7 +102,7 @@ router.put('/:id',(req,res)=>{
   
   let nama = req.body.nama
   let tinggi = parseFloat(req.body.tinggi)
-  let date = moment(req.body.date).format('YYYY MM DD')
+  let date = moment(req.body.date).format('YYYY-MM-DD')
   let status = req.body.status
   let berat = parseInt(req.body.berat)
   if (req.body.status == 'menikah') {
