@@ -189,11 +189,12 @@
                 <td>${item.status==true?'menikah':'jomblo'}</td>
                 <td>${item.lahir}</td>
                 <td>
-            <button type="button" class="btn btn-success" onClick="edit('${item._id}')">edit</button>
+            <button type="button" class="btn btn-success btn-sm btn-edit" iddata="${item._id}">edit</button>  
             <button type="button" class="btn btn-danger" onClick="del('${item._id}')">hapus</button>
            </td>
   </tr>
    `
+   // jqewry punya kemampuan detect event
 })
 
 $('table tbody').html(html)
@@ -232,7 +233,7 @@ $("#form-mahasiswa").trigger('reset')
 }
 $(document).ready(function(){
     readData()
-$("#form-mahasiswa").submit(function(event){
+$("#form-mahasiswa").submit(function(event){ // pake lansgung submit soalnya udah ada dari sana submitnya 
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     const id        = $('#id').val()
     const nama      = $('#nama').val()
@@ -243,6 +244,10 @@ $("#form-mahasiswa").submit(function(event){
 
     tambah(id,nama,berat,tinggi,status,date)
 })
+$('table tbody').on('click','.btn-edit', function(){
+  const id = $(this).attr('iddata')
+  edit(id)
+}) // pake .on('click') karna clicknya tidak ada dari sana nya tidak langsung jadi 
 
 document.getElementById("form-Search").addEventListener('submit',function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
@@ -281,29 +286,18 @@ readData()
 }
 const edit=(id)=>{
  
-    fetch(`http://localhost:3000/users/${id}`,{
-        method:'GET',
-        headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-        
-    }) // masukkan url yg di postman, ditambah method yg diiinginkan 
-  .then((response) => { //then pertama untuk masukkan nilai jadi json 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return response.json();
-  })
-  .then((response) => {
+  $.ajax({
+  method: "GET",
+  url: `http://localhost:3000/users/${id}`,
+  dataType : "json",
+}).done(function( response) {
    
-    document.getElementById('id').value = response._id
-      document.getElementById('nama').value = response.nama
-      document.getElementById('berat').value = response.berat
-      document.getElementById('tinggi').value = response.tinggi
-      document.querySelector(`input[value="${response.status==true?'nikah':'jomblo'}"]`).checked=true
-      document.getElementById('date').value = response.lahir
+   $('#id').val(response._id)
+     $('#nama').val(response.nama) 
+     $('#berat').val(response.berat) 
+     $('#tinggi').val(response.tinggi) 
+     $(`input[value="${response.status==true?'menikah':'jomblo'}"]`).prop('checked',true)
+     $('#date').val(response.lahir) 
   })
 }
 
