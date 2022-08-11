@@ -190,7 +190,7 @@
                 <td>${item.lahir}</td>
                 <td>
             <button type="button" class="btn btn-success btn-sm btn-edit" iddata="${item._id}">edit</button>  
-            <button type="button" class="btn btn-danger" onClick="del('${item._id}')">hapus</button>
+            <button type="button" class="btn btn-danger btn-sm btn-delete" deletedata="${item._id}">hapus</button>
            </td>
   </tr>
    `
@@ -217,7 +217,7 @@ const tambah=(id,nama,berat,tinggi,status,date)=>{
 }).done(function( response) {
 readData()
 $("#id").val('')
-$("#form-mahasiswa").reset();
+$("#form-mahasiswa").trigger('reset')
   })
   }else{
     $.ajax({
@@ -248,7 +248,10 @@ $('table tbody').on('click','.btn-edit', function(){
   const id = $(this).attr('iddata')
   edit(id)
 }) // pake .on('click') karna clicknya tidak ada dari sana nya tidak langsung jadi 
-
+$('table tbody').on('click','.btn-delete', function(){
+  const id = $(this).attr('deletedata')
+  del(id)
+})
 document.getElementById("form-Search").addEventListener('submit',function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     
@@ -264,22 +267,11 @@ document.getElementById("form-Search").addEventListener('submit',function(event)
 
 
 const del=(id)=>{
-    fetch(`http://localhost:3000/users/${id}`,{
-        method:'DELETE',
-        headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-        
-    }) // masukkan url yg di postman, ditambah method yg diiinginkan 
-  .then((response) => { //then pertama untuk masukkan nilai jadi json 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return response.json();
-  })
-  .then((response) => {
+  $.ajax({
+  method: "DELETE",
+  url: `http://localhost:3000/users/${id}`,
+  dataType : "json",
+}).done(function( response) {
 readData()
 
   })
