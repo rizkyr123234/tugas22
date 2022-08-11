@@ -208,59 +208,38 @@ $('pagination').html(pagi)
 const tambah=(id,nama,berat,tinggi,status,date)=>{
   
   if(id){
-    fetch(`http://localhost:3000/users/${id}`,{
-        method:'PUT',
-        headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-        body: JSON.stringify({id,nama,berat,tinggi,status,date})
-    }) // masukkan url yg di postman, ditambah method yg diiinginkan 
-  .then((response) => { //then pertama untuk masukkan nilai jadi json 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return response.json();
-  })
-  .then((response) => {
+    $.ajax({
+  method: "PUT",
+  url: `http://localhost:3000/users/${id}`,
+  dataType : "json",
+  data: {id,nama,berat,tinggi,status,date}
+}).done(function( response) {
 readData()
-document.getElementById("id").value = ''
-document.getElementById("form-mahasiswa").reset();
+$("#id").val('')
+$("#form-mahasiswa").reset();
   })
   }else{
-    fetch("http://localhost:3000/users",{
-        method:'POST',
-        headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-        body: JSON.stringify({nama,berat,tinggi,status,date})
-    }) // masukkan url yg di postman, ditambah method yg diiinginkan 
-  .then((response) => { //then pertama untuk masukkan nilai jadi json 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return response.json();
-  })
-  .then((response) => {
+    $.ajax({
+  method: "POST",
+  url: `http://localhost:3000/users`,
+  dataType : "json",
+  data: {nama,berat,tinggi,status,date}
+}).done(function( response) {
 readData()
-
-document.getElementById("form-mahasiswa").reset();
+$("#form-mahasiswa").trigger('reset')
   })
 }
 }
 $(document).ready(function(){
     readData()
-$("form-mahasiswa").submit(function(event){
+$("#form-mahasiswa").submit(function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
-    const id        = $('id').val()
-    const nama      = $('nama').val()
-    const berat     = $('berat').val()
-    const tinggi    = $('tinggi').val()
+    const id        = $('#id').val()
+    const nama      = $('#nama').val()
+    const berat     = $('#berat').val()
+    const tinggi    = $('#tinggi').val()
     const status    = $('input[name="status"]:checked').val()
-    const date      = $('date').val()
+    const date      = $('#date').val()
 
     tambah(id,nama,berat,tinggi,status,date)
 })
