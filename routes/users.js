@@ -52,9 +52,8 @@ const db = client.db(dbName);
     let tinggi = parseFloat(req.query.tinggi)
     tinggi1 = {tinggi:tinggi}
   }
-  if(req.query.status){
+  if(req.query.status&& req.query.status !='pilih' ){
     let status = req.query.status
-    console.log(req.query.status == 'nikah')
     if (req.query.status == 'nikah') {
       status = true
   } else { status = false }

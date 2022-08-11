@@ -43,13 +43,19 @@
               <legend class="col-form-label col-sm-2 pt-0">Status</legend>
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio"  id="sudahmenikah1" value="menikah" name="caristatus" >
+                  <input class="form-check-input" type="radio"  id="sudahmenikah3" value="pilih" name="caristatus" checked>
+                  <label class="form-check-label" for="sudahmenikah3">
+                    pilih
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio"  id="sudahmenikah1" value="nikah" name="caristatus" >
                   <label class="form-check-label" for="sudahmenikah1">
                     nikah
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio"  id="sudahmenikah2" value="jomblo" name="caristatus" checked>
+                  <input class="form-check-input" type="radio"  id="sudahmenikah2" value="jomblo" name="caristatus" >
                   <label class="form-check-label" for="sudahmenikah2">
                     jomblo
                   </label>
@@ -232,6 +238,7 @@ $("#form-mahasiswa").trigger('reset')
 }
 }
 $(document).ready(function(){
+  // kalo search by id ganti jadi pake crash tp kalo class ganti jadi pake .(namaclass)
     readData()
 $("#form-mahasiswa").submit(function(event){ // pake lansgung submit soalnya udah ada dari sana submitnya 
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
@@ -244,6 +251,7 @@ $("#form-mahasiswa").submit(function(event){ // pake lansgung submit soalnya uda
 
     tambah(id,nama,berat,tinggi,status,date)
 })
+
 $('table tbody').on('click','.btn-edit', function(){
   const id = $(this).attr('iddata')
   edit(id)
@@ -252,16 +260,16 @@ $('table tbody').on('click','.btn-delete', function(){
   const id = $(this).attr('deletedata')
   del(id)
 })
-document.getElementById("form-Search").addEventListener('submit',function(event){
+$("#form-Search").submit(function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     
-    const nama      = document.getElementById('carinama').value
-    const berat     = document.getElementById('cariberat').value
-    const tinggi    = document.getElementById('caritinggi').value
-    const status    = document.querySelector('input[name="caristatus"]:checked').value
-    const date      = document.getElementById('caridate').value
+    const nama      = $('#carinama').val()
+    const berat     = $('#cariberat').val()
+    const tinggi    = $('#caritinggi').val()
+    const status    = $('input[name="caristatus"]:checked').val()
+    const date      = $('#caridate').val()
     
-    readData({nama,berat,tinggi,status,date, page})
+    readData({nama,berat,tinggi,status,date})
 })
 })
 
@@ -293,17 +301,6 @@ const edit=(id)=>{
   })
 }
 
-document.getElementById("form-Search").addEventListener('submit',function(event){
-    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
-    
-    const nama      = document.getElementById('carinama').value
-    const berat     = document.getElementById('cariberat').value
-    const tinggi    = document.getElementById('caritinggi').value
-    const status    = document.querySelector('input[name="caristatus"]:checked').value
-    const date      = document.getElementById('caridate').value
-    
-    readData({nama,berat,tinggi,status,date, page})
-})
 
 
 </script>
