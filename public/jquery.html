@@ -65,6 +65,7 @@
             </fieldset>
             
             <button type="submit" class="btn btn-primary">Cari</button>
+            <button type="button" id="reset-form-search" class="btn btn-warning">RESET</button>
           </form>
     </div>
 </div>
@@ -87,19 +88,23 @@
            
         </tbody>
     </table>
-    <div class="row">
-      <nav aria-label="Page navigation" id="pagination">
-        
-      </nav>
-    </div>
-    <div class="md-6">
-      <select name="display"id="display" class="form-controll"> 
-        <option value="3" onclick="4">3</option>
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value=""></option>
-      </select>
-    </div>
+<div class="row">
+  <nav aria-label="...">
+    <ul class="pagination" id="pagination">
+      
+    </ul>
+  </nav>
+  
+  <div class="col-2" >
+    display :
+    <select name="display" id="display" class="form-control">
+      <option value="3">3</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+    </select>
+  </div>
+</div>
+   
     <div class="card">
         <div class="card-header">
             <h2>Form Mahasiswa</h2>
@@ -159,14 +164,14 @@
 </div>
 </body>
 <script>
-  // new URLSearchParams(params).toString()
-    // ini untuk method get
-    var params = {
-      pages: 4,
-    page: 1
-}
-    var angka
-    const readData = (params) =>{ // arrow function 
+  var params = {
+    pages: 6,
+    page: 1,
+    limit: 3
+  }
+    
+//============================BACA DATA ========================
+    const readData = () =>{ // arrow function 
 
         $.ajax({
   method: "GET",
@@ -204,14 +209,15 @@
 })
 
 $('table tbody').html(html)
-$('pagination').html(pagi)
+pagination()
 // document.getElementById('pagination').innerHTML= pagi
   }).fail(function(err){
     alert('gagal pake jquery ')
   })
    
 }
-//ini method post 
+
+//============================ADD DAN EDIT========================
 const tambah=(id,nama,berat,tinggi,status,date)=>{
   
   if(id){
@@ -237,6 +243,53 @@ $("#form-mahasiswa").trigger('reset')
   })
 }
 }
+
+//============================DELETE========================
+const del=(id)=>{
+  $.ajax({
+  method: "DELETE",
+  url: `http://localhost:3000/users/${id}`,
+  dataType : "json",
+}).done(function( response) {
+readData()
+
+  })
+}
+//============================EDIT========================
+const edit=(id)=>{
+ 
+  $.ajax({
+  method: "GET",
+  url: `http://localhost:3000/users/${id}`,
+  dataType : "json",
+}).done(function( response) {
+   
+   $('#id').val(response._id)
+     $('#nama').val(response.nama) 
+     $('#berat').val(response.berat) 
+     $('#tinggi').val(response.tinggi) 
+     $(`input[value="${response.status==true?'menikah':'jomblo'}"]`).prop('checked',true)
+     $('#date').val(response.lahir) 
+  })
+}
+const pagination = () =>{
+  params={...params, display: $('#display').val()}
+    let pagination = `
+    <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      </li>`
+      for(let i =1; i<=params.pages;i++){
+        pagination+=`<li class="page-item"><a class="page-link" href="#" datapage="${i}">${i}</a></li>`
+     
+
+      }
+     pagination+= `<li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    `
+    $('#pagination').html(pagination)
+}
+//============================LOAD DATA UNTUK MENGIRIM KE ATAS========================
 $(document).ready(function(){
   // kalo search by id ganti jadi pake crash tp kalo class ganti jadi pake .(namaclass)
     readData()
@@ -260,6 +313,12 @@ $('table tbody').on('click','.btn-delete', function(){
   const id = $(this).attr('deletedata')
   del(id)
 })
+$('#reset-form-search').click(function(){
+  readData()
+  $("#form-Search").trigger('reset')
+})
+
+$("#form-Search").trigger('reset')
 $("#form-Search").submit(function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     
@@ -268,39 +327,14 @@ $("#form-Search").submit(function(event){
     const tinggi    = $('#caritinggi').val()
     const status    = $('input[name="caristatus"]:checked').val()
     const date      = $('#caridate').val()
-    
-    readData({nama,berat,tinggi,status,date})
+    params = {nama,berat,tinggi,status,date}
+    readData(params)
+})
+$('#display').change(function(){
+  params={...params, display: $('#display').val()}
+  readData()
 })
 })
-
-
-const del=(id)=>{
-  $.ajax({
-  method: "DELETE",
-  url: `http://localhost:3000/users/${id}`,
-  dataType : "json",
-}).done(function( response) {
-readData()
-
-  })
-}
-const edit=(id)=>{
- 
-  $.ajax({
-  method: "GET",
-  url: `http://localhost:3000/users/${id}`,
-  dataType : "json",
-}).done(function( response) {
-   
-   $('#id').val(response._id)
-     $('#nama').val(response.nama) 
-     $('#berat').val(response.berat) 
-     $('#tinggi').val(response.tinggi) 
-     $(`input[value="${response.status==true?'menikah':'jomblo'}"]`).prop('checked',true)
-     $('#date').val(response.lahir) 
-  })
-}
-
 
 
 </script>
