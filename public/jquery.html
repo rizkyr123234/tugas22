@@ -315,11 +315,12 @@ $('table tbody').on('click','.btn-delete', function(){
   del(id)
 })
 $('#reset-form-search').click(function(){
-  readData()
   params ={
     page: 1,
     limit: 3
   }
+  readData()
+ 
   $("#form-Search").trigger('reset')
 })
 

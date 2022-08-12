@@ -13,7 +13,7 @@ const db = client.db(dbName);
 
   router.get('/', function(req, res, next) {
    
-    const limit = parseInt(req.query.display) || 3
+    const limit = parseInt(req.query.display)  || 3
   const page = req.query.page ||1
   const offset = (page-1)*limit
 
