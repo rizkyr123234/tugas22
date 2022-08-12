@@ -165,7 +165,6 @@
 </body>
 <script>
   var params = {
-    pages: 6,
     page: 1,
     limit: 3
   }
@@ -179,6 +178,7 @@
   dataType : "json",
   data: params
 }).done(function( response) {
+  params={...params,pages:response.pages}
     let html = ''
    let pagi = `
   <ul class="pagination">
@@ -275,18 +275,19 @@ const edit=(id)=>{
 const pagination = () =>{
   params={...params, display: $('#display').val()}
     let pagination = `
-    <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+    <li class="page-item">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" datapage="${params.page - 1}">Previous</a>
       </li>`
       for(let i =1; i<=params.pages;i++){
-        pagination+=`<li class="page-item"><a class="page-link" href="#" datapage="${i}">${i}</a></li>`
+        pagination+=`<li class="page-item ${i==params.page?'active':''}"><a class="page-link" href="#" datapage="${i}">${i}</a></li>`
      
 
       }
      pagination+= `<li class="page-item">
-        <a class="page-link" href="#">Next</a>
+        <a class="page-link" href="#" datapage="${params.page + 1}" tabindex="+1">Next</a>
       </li>
     `
+    
     $('#pagination').html(pagination)
 }
 //============================LOAD DATA UNTUK MENGIRIM KE ATAS========================
@@ -315,6 +316,10 @@ $('table tbody').on('click','.btn-delete', function(){
 })
 $('#reset-form-search').click(function(){
   readData()
+  params ={
+    page: 1,
+    limit: 3
+  }
   $("#form-Search").trigger('reset')
 })
 
@@ -327,11 +332,16 @@ $("#form-Search").submit(function(event){
     const tinggi    = $('#caritinggi').val()
     const status    = $('input[name="caristatus"]:checked').val()
     const date      = $('#caridate').val()
-    params = {nama,berat,tinggi,status,date}
-    readData(params)
+    params = {...params,nama,berat,tinggi,status,date}
+    readData()
 })
 $('#display').change(function(){
   params={...params, display: $('#display').val()}
+  readData()
+})
+$('#pagination').on('click','.page-link', function(event){
+  event.preventDefault();
+  params = {...params, page:$(this).attr('datapage')}
   readData()
 })
 })
