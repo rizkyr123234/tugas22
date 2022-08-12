@@ -275,7 +275,7 @@ const edit=(id)=>{
 const pagination = () =>{
   params={...params, display: $('#display').val()}
     let pagination = `
-    <li class="page-item">
+    <li class="page-item ${1==params.page?'disabled':''}">
         <a class="page-link" href="#" tabindex="-1" aria-disabled="true" datapage="${params.page - 1}">Previous</a>
       </li>`
       for(let i =1; i<=params.pages;i++){
@@ -283,11 +283,11 @@ const pagination = () =>{
      
 
       }
-     pagination+= `<li class="page-item">
-        <a class="page-link" href="#" datapage="${params.page + 1}" tabindex="+1">Next</a>
+     pagination+= `<li class="page-item ${params.pages==params.page?'disabled':''}">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" datapage="${parseInt(params.page) + 1}">next</a>
       </li>
     `
-    
+
     $('#pagination').html(pagination)
 }
 //============================LOAD DATA UNTUK MENGIRIM KE ATAS========================
@@ -336,7 +336,7 @@ $("#form-Search").submit(function(event){
     readData()
 })
 $('#display').change(function(){
-  params={...params, display: $('#display').val()}
+  params={...params, display: $('#display').val(),page:1}
   readData()
 })
 $('#pagination').on('click','.page-link', function(event){
