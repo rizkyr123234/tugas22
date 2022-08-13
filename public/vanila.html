@@ -352,9 +352,10 @@ const pagination = () =>{
 document.getElementById("pagination").addEventListener('click',function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     let cek =document.getElementById("hehe").getAttribute("href")
-    
-    params1 = {...params1, page:cek}
+
     console.log(cek)
+    params1 = {...params1, page:cek}
+    
   readData(params1)
 })
 

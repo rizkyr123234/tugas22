@@ -326,7 +326,7 @@ $("#form-Search").submit(function(event){
     const tinggi    = $('#caritinggi').val()
     const status    = $('input[name="caristatus"]:checked').val()
     const date      = $('#caridate').val()
-    params = {...params,nama,berat,tinggi,status,date}
+    params = {...params,nama,berat,tinggi,status,date,page:1}
     readData()
 })
 $('#display').change(function(){
