@@ -42,7 +42,7 @@
               <legend class="col-form-label col-sm-2 pt-0">Status</legend>
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio"  id="sudahmenikah1" value="menikah" name="caristatus" >
+                  <input class="form-check-input" type="radio"  id="sudahmenikah1" value="nikah" name="caristatus" >
                   <label class="form-check-label" for="sudahmenikah1">
                     nikah
                   </label>
@@ -81,17 +81,20 @@
         </tbody>
     </table>
     <div class="row">
-      <nav aria-label="Page navigation" id="pagination">
-        
+      <nav aria-label="...">
+        <ul class="pagination" id="pagination">
+          
+        </ul>
       </nav>
-    </div>
-    <div class="md-6">
-      <select name="display"id="display" class="form-controll"> 
-        <option value="3" onclick="4">3</option>
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value=""></option>
-      </select>
+      
+      <div class="col-2" >
+        display :
+        <select name="display" id="display" class="form-control">
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+        </select>
+      </div>
     </div>
     <div class="card">
         <div class="card-header">
@@ -154,13 +157,14 @@
 <script>
   // new URLSearchParams(params).toString()
     // ini untuk method get
-    var params = {
-      pages: 4,
-    page: 1
-}
-    var angka
+    var params1 = {
+      page : 1,
+      pages : 2
+    }
+     
+   
     const readData = (params) =>{ // arrow function 
-    fetch(`http://localhost:3000/users/?${new URLSearchParams(params).toString()}&page=`) // masukkan url yg di postman 
+    fetch(`http://localhost:3000/users/?${new URLSearchParams(params).toString()}`) // masukkan url yg di postman 
   .then((response) => { //then pertama untuk masukkan nilai jadi json 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -169,17 +173,8 @@
     return response.json();
   })
   .then((response) => {
+    params1 = {...params1, pages : response.pages}
    let html = ''
-   let pagi = `
-  <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>`
-          for(let i = 1; i<=response.pages;i++){
-      pagi+=`<li class="page-item"><a class="page-link" id ="cek" href=${i}>${i}</a></li>`
-    }    
-          
-  pagi+=       ` <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-  `
    response.data.forEach((item,index)=>{
    html+=`
    <tr>
@@ -198,7 +193,8 @@
 })
 
 document.querySelector('table tbody').innerHTML= html
-document.getElementById('pagination').innerHTML= pagi
+pagination()
+
   });
 }
 //ini method post 
@@ -261,17 +257,17 @@ document.getElementById("form-mahasiswa").addEventListener('submit',function(eve
     tambah(id,nama,berat,tinggi,status,date)
 })
 
-document.getElementById("form-Search").addEventListener('submit',function(event){
-    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
+// document.getElementById("form-Search").addEventListener('submit',function(event){
+//     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     
-    const nama      = document.getElementById('carinama').value
-    const berat     = document.getElementById('cariberat').value
-    const tinggi    = document.getElementById('caritinggi').value
-    const status    = document.querySelector('input[name="caristatus"]:checked').value
-    const date      = document.getElementById('caridate').value
+//     const nama      = document.getElementById('carinama').value
+//     const berat     = document.getElementById('cariberat').value
+//     const tinggi    = document.getElementById('caritinggi').value
+//     const status    = document.querySelector('input[name="caristatus"]:checked').value
+//     const date      = document.getElementById('caridate').value
     
-    readData({nama,berat,tinggi,status,date, page})
-})
+//     readData({nama,berat,tinggi,status,date})
+// })
 
 const del=(id)=>{
     fetch(`http://localhost:3000/users/${id}`,{
@@ -330,10 +326,37 @@ document.getElementById("form-Search").addEventListener('submit',function(event)
     const tinggi    = document.getElementById('caritinggi').value
     const status    = document.querySelector('input[name="caristatus"]:checked').value
     const date      = document.getElementById('caridate').value
-    
-    readData({nama,berat,tinggi,status,date, page})
+    params1={...params1,nama,berat,tinggi,status,date}
+    readData(params1)
 })
+const pagination = () =>{
+ 
+    let pagination = `
+    <li class="page-item ${1==params1.page?'disabled':''}">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" datapage="${params1.page - 1}">Previous</a>
+      </li>`
+      for(let i =1; i<=params1.pages;i++){
+        pagination+=`<li class="page-item ${i==params1.page?'active':''}"><a class="page-link pagination-btn"  id ="hehe" href="${i}" datapage="${i}">${i}</a></li>`
+     
 
+      }
+     pagination+= `<li class="page-item ${params1.pages==params1.page?'disabled':''}">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" datapage="${parseInt(params1.page) + 1}">next</a>
+      </li>
+    `
+
+    document.getElementById('pagination').innerHTML= pagination
+}
+// const cek =document.getElementsByClassName("pagination-btn")
+// console.log(cek)
+document.getElementById("pagination").addEventListener('click',function(event){
+    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
+    let cek =document.getElementById("hehe").getAttribute("href")
+    
+    params1 = {...params1, page:cek}
+    console.log(cek)
+  readData(params1)
+})
 
 </script>
 </html>
