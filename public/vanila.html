@@ -48,7 +48,13 @@
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio"  id="sudahmenikah2" value="jomblo" name="caristatus" checked>
+                  <input class="form-check-input" type="radio"  id="sudahmenikah1" value="pilih" name="caristatus" checked >
+                  <label class="form-check-label" for="sudahmenikah1">
+                    pilih
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio"  id="sudahmenikah2" value="jomblo" name="caristatus" >
                   <label class="form-check-label" for="sudahmenikah2">
                     jomblo
                   </label>
@@ -90,9 +96,9 @@
       <div class="col-2" >
         display :
         <select name="display" id="display" class="form-control">
-          <option value="3">3</option>
-          <option value="5">5</option>
-          <option value="10">10</option>
+          <option value="3"  >3</option>
+          <option value="5" >5</option>
+          <option value="10" >10</option>
         </select>
       </div>
     </div>
@@ -175,6 +181,7 @@
   .then((response) => {
     params1 = {...params1, pages : response.pages}
    let html = ''
+
    response.data.forEach((item,index)=>{
    html+=`
    <tr>
@@ -190,6 +197,7 @@
            </td>
   </tr>
    `
+  
 })
 
 document.querySelector('table tbody').innerHTML= html
@@ -257,17 +265,7 @@ document.getElementById("form-mahasiswa").addEventListener('submit',function(eve
     tambah(id,nama,berat,tinggi,status,date)
 })
 
-// document.getElementById("form-Search").addEventListener('submit',function(event){
-//     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
-    
-//     const nama      = document.getElementById('carinama').value
-//     const berat     = document.getElementById('cariberat').value
-//     const tinggi    = document.getElementById('caritinggi').value
-//     const status    = document.querySelector('input[name="caristatus"]:checked').value
-//     const date      = document.getElementById('caridate').value
-    
-//     readData({nama,berat,tinggi,status,date})
-// })
+
 
 const del=(id)=>{
     fetch(`http://localhost:3000/users/${id}`,{
@@ -326,38 +324,40 @@ document.getElementById("form-Search").addEventListener('submit',function(event)
     const tinggi    = document.getElementById('caritinggi').value
     const status    = document.querySelector('input[name="caristatus"]:checked').value
     const date      = document.getElementById('caridate').value
-    params1={...params1,nama,berat,tinggi,status,date}
+    params1={...params1,nama,berat,tinggi,status,date,page:1}
     readData(params1)
 })
 const pagination = () =>{
  
     let pagination = `
     <li class="page-item ${1==params1.page?'disabled':''}">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" datapage="${params1.page - 1}">Previous</a>
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" onclick="change(${params1.page-1})">Previous</a>
       </li>`
       for(let i =1; i<=params1.pages;i++){
-        pagination+=`<li class="page-item ${i==params1.page?'active':''}"><a class="page-link pagination-btn"  id ="hehe" href="${i}" datapage="${i}">${i}</a></li>`
+        pagination+=`<li class="page-item ${i==params1.page?'active':''}"><a class="page-link pagination-btn" onclick="change(${i})"  id ="hehe" datapage="${i}">${i}</a></li>`
      
 
       }
      pagination+= `<li class="page-item ${params1.pages==params1.page?'disabled':''}">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" datapage="${parseInt(params1.page) + 1}">next</a>
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" onclick="change(${params1.page+1})">next</a>
       </li>
     `
 
     document.getElementById('pagination').innerHTML= pagination
 }
-// const cek =document.getElementsByClassName("pagination-btn")
-// console.log(cek)
-document.getElementById("pagination").addEventListener('click',function(event){
-    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
-    let cek =document.getElementById("hehe").getAttribute("href")
 
-    console.log(cek)
-    params1 = {...params1, page:cek}
-    
+function change(page){
+  params1 ={...params1,page:page}
+  
   readData(params1)
-})
+}
 
+document.getElementById("display").addEventListener('click',function(event){
+    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
+    
+    const display = document.getElementById('display').value
+    params1={...params1,display:display,page:1}
+    readData(params1)
+})
 </script>
-</html>
+</html> 
