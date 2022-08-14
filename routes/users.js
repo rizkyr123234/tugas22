@@ -30,7 +30,7 @@ const db = client.db(dbName);
     order = {tinggi : mode}
   } else if(req.query.orderBy=='lahir'){
     order={lahir:mode}
-  }
+  } else{order={nama:mode}}
   // =============================SEARCHING=====================
 
   let status1 

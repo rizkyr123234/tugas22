@@ -62,13 +62,29 @@
                 
               </div>
             </fieldset>
-            
             <button type="submit" class="btn btn-primary">Cari</button>
+            <button type="button" id="reset-form-search" class="btn btn-warning" onclick="reset()">RESET</button>
           </form>
     </div>
 </div>
     <h1>Data Mahasiswa</h1>
-
+    <div class="col-2" >
+      urutan berdasarkan : 
+      <select name="orderBy" id="orderBy" class="form-control">
+        <option value="nama"  >nama</option> 
+        <option value="berat" >berat</option>
+        <option value="tinggi" >tinggi</option>
+        <option value="lahir" >lahir</option>
+      </select>
+    </div>
+    <div class="col-2" >
+     Urutan:
+      <select name="orderBy" id="mode" class="form-control">
+        <option value="1"  >atas-kebawah</option>
+         <option value="-1" >bawah-keatas</option>
+      </select>
+    </div>
+  </div>
     <div class="container">
     <table class="table table-stripped">
         <thead>
@@ -351,12 +367,33 @@ function change(page){
   
   readData(params1)
 }
-
+function reset(){
+  
+  params1={page:1,limit:3}
+  readData(params1)
+  document.getElementById("form-Search").reset();
+  document.getElementById("form-mahasiswa").reset();
+  document.getElementById("mode").reset();
+}
 document.getElementById("display").addEventListener('click',function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     
     const display = document.getElementById('display').value
     params1={...params1,display:display,page:1}
+    readData(params1)
+})
+document.getElementById("orderBy").addEventListener('click',function(event){
+    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
+    
+    const orderBy = document.getElementById('orderBy').value
+    params1={...params1,orderBy:orderBy,page:1}
+    readData(params1)
+})
+document.getElementById("mode").addEventListener('click',function(event){
+    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
+    
+    const mode = document.getElementById('mode').value
+    params1={...params1,mode:mode,page:1}
     readData(params1)
 })
 </script>
