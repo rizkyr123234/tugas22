@@ -63,7 +63,7 @@
               </div>
             </fieldset>
             <button type="submit" class="btn btn-primary">Cari</button>
-            <button type="button" id="reset-form-search" class="btn btn-warning" onclick="reset()">RESET</button>
+            <button type="button" id="reset-form-search" class="btn btn-warning" >RESET</button>
           </form>
     </div>
 </div>
@@ -80,8 +80,8 @@
     <div class="col-2" >
      Urutan:
       <select name="orderBy" id="mode" class="form-control">
-        <option value="1"  >atas-kebawah</option>
-         <option value="-1" >bawah-keatas</option>
+        <option value="1"  >ASC</option>
+         <option value="-1" >DSC</option>
       </select>
     </div>
   </div>
@@ -339,8 +339,8 @@ document.getElementById("form-Search").addEventListener('submit',function(event)
     const berat     = document.getElementById('cariberat').value
     const tinggi    = document.getElementById('caritinggi').value
     const status    = document.querySelector('input[name="caristatus"]:checked').value
-    const date      = document.getElementById('caridate').value
-    params1={...params1,nama,berat,tinggi,status,date,page:1}
+    const date1      = document.getElementById('caridate').value
+    params1={...params1,nama,berat,tinggi,status,date1,page:1}
     readData(params1)
 })
 const pagination = () =>{
@@ -368,13 +368,22 @@ function change(page){
   readData(params1)
 }
 function reset(){
+  change(1)
   
-  params1={page:1,limit:3}
-  readData(params1)
+  readData()
   document.getElementById("form-Search").reset();
-  document.getElementById("form-mahasiswa").reset();
-  document.getElementById("mode").reset();
+  
+ 
 }
+document.getElementById("reset-form-search").addEventListener('click',function(event){
+    event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
+    document.getElementById("form-Search").reset();
+    const orderBy = document.getElementById('orderBy').value
+    const display = document.getElementById('display').value
+    const mode = document.getElementById('mode').value
+    params1={page:1,orderBy:orderBy,mode:mode,display:display}
+    readData(params1)
+})
 document.getElementById("display").addEventListener('click',function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     

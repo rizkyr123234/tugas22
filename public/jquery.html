@@ -84,8 +84,8 @@
     <div class="col-3" >
       Besar-kecil
        <select name="mode" id="mode" class="form-control">
-         <option value="1"  >atas-kebawah</option>
-         <option value="-1" >bawah-keatas</option>
+         <option value="1"  >ASC</option>
+         <option value="-1" >DSC</option>
        </select>
      </div>
     <div class="container">
@@ -325,12 +325,16 @@ $('table tbody').on('click','.btn-delete', function(){
 $('#reset-form-search').click(function(){
   params ={
     page: 1,
-    limit: 3
+    orderBy:$('#orderBy').val(),
+    mode: $('#mode').val(),
+    display:$('#display').val()
+
+
   }
   readData()
   $("#form-Search").trigger('reset')
-  // $("#form-Search").trigger('reset')
-  $("datapage").val(1)
+ 
+  // $("datapage").val(1)
 
 })
 
@@ -342,8 +346,8 @@ $("#form-Search").submit(function(event){
     const berat     = $('#cariberat').val()
     const tinggi    = $('#caritinggi').val()
     const status    = $('input[name="caristatus"]:checked').val()
-    const date      = $('#caridate').val()
-    params = {...params,nama,berat,tinggi,status,date,page:1}
+    const date1      = $('#caridate').val()
+    params = {...params,nama,berat,tinggi,status,date1,page:1}
     readData()
 })
 $('#display').change(function(){
