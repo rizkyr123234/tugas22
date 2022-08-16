@@ -347,7 +347,7 @@ const pagination = () =>{
  
     let pagination = `
     <li class="page-item ${1==params1.page?'disabled':''}">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" onclick="change(${params1.page-1})">Previous</a>
+        <a class="page-link"  tabindex="-1" aria-disabled="true" onclick="change(${params1.page-1})">Previous</a>
       </li>`
       for(let i =1; i<=params1.pages;i++){
         pagination+=`<li class="page-item ${i==params1.page?'active':''}"><a class="page-link pagination-btn" onclick="change(${i})"  id ="hehe" datapage="${i}">${i}</a></li>`
@@ -355,7 +355,7 @@ const pagination = () =>{
 
       }
      pagination+= `<li class="page-item ${params1.pages==params1.page?'disabled':''}">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" onclick="change(${params1.page+1})">next</a>
+        <a class="page-link"  tabindex="-1" aria-disabled="true" onclick="change(${params1.page+1})">next</a>
       </li>
     `
 
@@ -366,21 +366,18 @@ function change(page){
   params1 ={...params1,page:page}
   
   readData(params1)
+  return false
 }
-function reset(){
-  change(1)
-  
-  readData()
-  document.getElementById("form-Search").reset();
-  
- 
-}
+
 document.getElementById("reset-form-search").addEventListener('click',function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     document.getElementById("form-Search").reset();
-    const orderBy = document.getElementById('orderBy').value
-    const display = document.getElementById('display').value
-    const mode = document.getElementById('mode').value
+    document.getElementById('orderBy').value ='nama'
+     document.getElementById('display').value = '3'
+    document.getElementById('mode').value = '1'
+    const orderBy = 'nama'
+    const display = '3'
+    const mode = '1'
     params1={page:1,orderBy:orderBy,mode:mode,display:display}
     readData(params1)
 })
@@ -391,7 +388,7 @@ document.getElementById("display").addEventListener('click',function(event){
     params1={...params1,display:display,page:1}
     readData(params1)
 })
-document.getElementById("orderBy").addEventListener('click',function(event){
+document.getElementById("orderBy").addEventListener('change',function(event){
     event.preventDefault(); //mencegah supaya tidak pindah halaman, karena form itu behaviour nya pindah halaman 
     
     const orderBy = document.getElementById('orderBy').value

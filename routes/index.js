@@ -1,15 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const moment = require('moment')
-const { MongoClient, ObjectId } = require('mongodb');
-
-const url = 'mongodb://localhost:27017';
-const client = new MongoClient(url);
-client.connect()
+const moment = require('moment');
+var client = require('../db')
 const dbName = 'datadb';
-const db = client.db(dbName);
+const db = client.client.db(dbName);
   const collection = db.collection('mahasiswa');
-
+  
 router.get('/', function(req, res, next) {
 
   const url = req.url == '/' ? '/?page=1&orderBy=nama&mode=1' :req.url
@@ -102,13 +98,13 @@ res.redirect('/')
 //============================DELETE===============================================
 router.get('/delet/:id',(req,res)=>{
   const index =req.params.id
-  collection.deleteOne({_id:ObjectId(index)})
+  collection.deleteOne({_id:client.ObjectId(index)})
   res.redirect('/')
 })
 
 //============================EDIT===============================================
 router.get('/edit/:id',(req,res)=>{
-  collection.find({_id:ObjectId(req.params.id)}).toArray()
+  collection.find({_id:client.ObjectId(req.params.id)}).toArray()
   .then(hasil=>res.render('edit',{item:hasil[0],moment}))
 })
 
@@ -122,7 +118,7 @@ router.post('/edit/:id',(req,res)=>{
   if (req.body.status == 'menikah') {
       status = true
   } else { status = false }
-  collection.updateMany({_id:ObjectId(req.body.id)},{$set:{nama:nama,berat:berat, tinggi:tinggi,status:status,lahir:date}})
+  collection.updateMany({_id:client.ObjectId(req.body.id)},{$set:{nama:nama,berat:berat, tinggi:tinggi,status:status,lahir:date}})
   res.redirect('/')
 })
 

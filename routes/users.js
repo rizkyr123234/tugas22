@@ -1,16 +1,10 @@
 var express = require('express');
 var router = express.Router();
-
-const moment = require('moment')
-const { MongoClient, ObjectId } = require('mongodb');
-
-const url = 'mongodb://localhost:27017';
-const client = new MongoClient(url);
-client.connect()
+var client = require('../db')
+ 
 const dbName = 'datadb';
-const db = client.db(dbName);
+const db = client.client.db(dbName);
   const collection = db.collection('mahasiswa');
-
   router.get('/', function(req, res, next) {
    
     const limit = parseInt(req.query.display)  || 3
@@ -107,7 +101,7 @@ router.put('/:id',(req,res)=>{
   if (req.body.status == 'menikah') {
       status = true
   } else { status = false }
-  collection.updateMany({_id:ObjectId(req.body.id)},{$set:{nama:nama,berat:berat, tinggi:tinggi,status:status,lahir:date}})
+  collection.updateMany({_id:client.ObjectId(req.body.id)},{$set:{nama:nama,berat:berat, tinggi:tinggi,status:status,lahir:date}})
   .then(hasil=>res.status(200).json(hasil))
   .catch(error=>res.status(500).json({message:"eror ambil data"}))
 })
@@ -115,7 +109,7 @@ router.put('/:id',(req,res)=>{
 //=====================HAPUS DATA=====================
 router.delete('/:id',(req,res)=>{
   const index =req.params.id
-  collection.deleteOne({_id:ObjectId(index)})
+  collection.deleteOne({_id:client.ObjectId(index)})
   .then(hasil=>res.status(200).json(hasil))
   .catch(error=>res.status(500).json({message:"eror ambil data"}))
 })

@@ -325,15 +325,16 @@ $('table tbody').on('click','.btn-delete', function(){
 $('#reset-form-search').click(function(){
   params ={
     page: 1,
-    orderBy:$('#orderBy').val(),
-    mode: $('#mode').val(),
-    display:$('#display').val()
-
+    display:3,
+    orderBy:'nama',
+    mode: 1
 
   }
   readData()
   $("#form-Search").trigger('reset')
- 
+  $('#display').val('3')
+  $('#orderBy').val('nama')
+
   // $("datapage").val(1)
 
 })
